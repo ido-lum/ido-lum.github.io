@@ -1,0 +1,15 @@
+{
+  "name": "noisewebtools",
+  "version": "0.0.0",
+  "description": "Set of music tools.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dan stev ward",
+  "license": "ISC",
+  "dependencies": {
+    "double-metaphone": "^1.0.4",
+    "levenshtein-edit-distance": "^2.0.4"
+  }
+}
