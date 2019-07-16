@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css.css">
+
+    <title>noise . website</title>
+        <h1><a href="index.html">noise . website | Note Counter</a><h1>
+        	<h2>Note Counter</h2>
+
+    <div class="col-12 text-center">
+
+        <form id="form" >
+            First note:<br>
+            <input type="text" id="firstnote" >
+            <br>
+            Last note:<br>
+            <input type="text" id="lastnote" >
+            <br><br>
+            <input type="button" value="Submit" onclick="Algorithm()">
+        </form>
+        <div id="val1">
+
+        </div>
+        <div id="val2">
+
+        </div>
+        <div id="output">
+
+        </div>
+
+        <script>
+
+            function Algorithm()
+            {
+                var noteOne = document.getElementById("firstnote").value;
+                console.info(noteOne);
+                var noteTwo = document.getElementById("lastnote").value;
+
+
+                var val1 = GetValue(noteOne);
+                var val1Out = document.getElementById("val1");
+                val1Out.innerHTML = val1.toString();
+                var val2 = GetValue(noteTwo);
+                var val2Out = document.getElementById("val2");
+                val2Out.innerHTML = val2.toString();
+
+                var result = (val2 - val1);
+                var out = document.getElementById("output");
+
+                    out.innerHTML = result.toString();
+
+                document.getElementById("firstnote").value = noteOne;
+                document.getElementById("lastnote").value = noteTwo;
+            }
+
+            function GetValue(note)
+            {
+                console.info("Processing NOTE: ");
+                console.info(note);
+                var count = 0;
+                for (var i = 0; i < note.length; i++) {
+                        console.info(note[i]);
+                        var o = ProcessChar(note[i]);
+                        count += o;
+                    }
+                return count;
+            }
+
+            function ProcessChar(char)
+            {
+                console.info("Processing CHAR: ");
+                console.info(char);
+                var out = 0;
+                if(char == 'b')
+                {
+                    out = -1;
+                }
+                else if(char == 'C' || char == '#')
+                {
+                    out = 1;
+                }
+                else if(char == 'D')
+                {
+                    out = 2;
+                }
+                else if(char == 'E')
+                {
+                    out = 5;
+                }
+                else if(char == 'F')
+                {
+                    out = 6;
+                }
+                else if(char == 'G')
+                {
+                    out = 8;
+                }
+                else if(char == 'A')
+                {
+                    out = 10;
+                }
+                else if(char == 'B')
+                {
+                    out = 12;
+                }
+                else if(char == '0')
+                {
+                    out = 0;
+                }
+                else
+                {
+                    out = char * 12;
+                }
+                
+                console.info(out);
+                return out;
+            }
+        </script>
+
+
+    </div>
+</header>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
