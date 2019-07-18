@@ -2,22 +2,36 @@ class Section {
 
   constructor()
   {
-    this.len = 8;
-  }
+    this.name = "section name";
+    this.InstrumentCount = "3";
+    this.Instruments = new Array("drums", "guitar","synths","vocals");
+  };
+
+
 
   Draw()
   {
-    var div = document.createElement("section");
-    div.style.background = "red";
-    div.style.color = "blue";
-    div.innerHTML = "<h2>section</h2><div>section name etc etc etc</div><div>section name etc etc etc</div>";
-    document.getElementById("song").appendChild(div);
+    RenderSection("section", this.name, this.name);
+  };
+
+  function RenderSection(target, name, value)
+  {
+    var div = document.createElement(target);
+    div.style.background = "Yellow";
+    div.innerHTML = "Section Name" + ": " + value;
+    for(var i = 0; i < this.InstrumentCount; i++)
+    {
+      div.innerHTML += "</br><h2>"+this.Instruments[i]+"</h2><div>instrument info</div>";
     }
+    
+    document.getElementById("song").appendChild(div);
+  };
+
+
+  
 };
 
 class Song {
-
-  
 
   constructor()
   {
