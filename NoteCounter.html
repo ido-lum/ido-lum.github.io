@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css.css">
 
     <title>noise . website</title>
+    <body>
         <h1><a href="index.html">noise . website | Note Counter</a><h1>
         	<h2>Note Counter</h2>
 
@@ -17,10 +18,10 @@
 
         <form id="form" >
             First note:<br>
-            <input type="text" id="firstnote" >
+            <input type="text" id="firstnote"  maxlength="3" pattern="[A-G]{3}" title="Musical note" placeholder="C4">
             <br>
             Last note:<br>
-            <input type="text" id="lastnote" >
+            <input type="text" id="lastnote"  maxlength="3" pattern="[A-G#b0-9]{3}" title="Musical note" placeholder="A4">
             <br><br>
             <input type="button" value="Submit" onclick="Algorithm()">
         </form>
@@ -34,15 +35,26 @@
 
         </div>
 
-        <script>
+        
+
+
+    </div>
+
+    <script>
 
             function Algorithm()
             {
+                //Grabbing input
                 var noteOne = document.getElementById("firstnote").value;
-                console.info(noteOne);
                 var noteTwo = document.getElementById("lastnote").value;
 
+                //Validating input
+                if(noteOne.length > 3)
+                {
+                    alert("The notes you have entered are too long.");
+                }
 
+                //Procesing input
                 var val1 = GetValue(noteOne);
                 var val1Out = document.getElementById("val1");
                 val1Out.innerHTML = val1.toString();
@@ -50,13 +62,20 @@
                 var val2Out = document.getElementById("val2");
                 val2Out.innerHTML = val2.toString();
 
+                //printing output
                 var result = (val2 - val1);
                 var out = document.getElementById("output");
 
                     out.innerHTML = result.toString();
 
+                //saving input in the correct field
                 document.getElementById("firstnote").value = noteOne;
                 document.getElementById("lastnote").value = noteTwo;
+            }
+
+            function ValidateNote(note)
+            {
+
             }
 
             function GetValue(note)
@@ -122,10 +141,6 @@
                 return out;
             }
         </script>
-
-
-    </div>
-</header>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

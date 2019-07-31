@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css.css">
+
+    <title>noise . website</title>
+    <body>
+        <h1><a href="index.html">noise . website | Sound Designer</a><h1>
+        	<h2>Sound Designer</h2>
+    <div class="col-12 text-center">
+
+        <form id="form" >
+            <input id="buttonian"type="button" value='0' onclick="Convert()">
+        </form>
+
+        <div id="output">
+
+    </div>
+
+    </div>
+    
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script>
+function Convert(){
+
+    var o = parseInt(document.getElementById("buttonian").value);
+
+    var s = new Section(o);
+    console.log(s);
+    document.getElementById("buttonian").value = (o+1).toString();
+    var mount = s.InstrumentCount-1;
+    document.getElementById("output").innerHTML +=  "</br><div class='container'><h1>Section ID: " + o.toString() + "</h1><div><h2> Instrument count: " + mount.toString() + "</h2></div>";
+    for (var x = 1; x < s.InstrumentCount; x++) {
+        var count = x;
+        document.getElementById("output").innerHTML += "</br><div  class='container'><h3>Instrument: " + count.toString() + "</h3> ";
+        document.getElementById("output").innerHTML += "</br><div  class='col'><h4>Sounds: " + s.Sounds[x].Start + "</h4></div> ";
+
+        for (var y = 0; y < s.Sounds[x].stepObjs.length; y++) {
+            document.getElementById("output").innerHTML += "</br><div  class='col'><h5>Step: " + s.Sounds[x].stepObjs[y].Algo + "</h5>";
+            document.getElementById("output").innerHTML += "</br><div  class='container'><h6>Description: " + s.Sounds[x].stepObjs[y].Desc + "</h6></div></div>";
+        }
+        document.getElementById("output").innerHTML += "</div>";
+        
+    }
+    document.getElementById("output").innerHTML += "</div>";
+}
+class Section {
+
+  constructor(id)
+  {
+    this.sectionID = id;
+
+    var ins = Math.floor(Math.random() * 7) + 1;
+    this.InstrumentCount =  ins;
+
+    var sounds = [ins];
+    for (var i = 0; i < ins; i++) {
+        var sound = new Sound(i);
+        sounds.push(sound);
+      }
+    this.Sounds = sounds;
+  }
+
+};
+
+class Sound {
+
+  constructor(id)
+  {
+
+    var textArray = [
+      'Midi','Input','Sample'
+
+    ];
+    this.SoundID = "Sound: " + id;
+    
+    var rand1 = Math.floor(Math.random()*textArray.length);
+    this.Start = textArray[rand1];
+
+    var stepObjs = [];
+    var check = true;
+    var count = 0;
+    while(check)
+    {
+        var stepper = new Step(id, count, this.Start);
+        stepObjs.push(stepper);
+        check = stepper.Check;
+        count = count + 1;
+    };
+    this.stepObjs = stepObjs;
+  };
+};
+
+class Step {
+
+  constructor(id, steps, start)
+  {
+    this.StepID = id;
+    this.Step = steps;
+    this.Algo = "error generating step";
+    this.Check = true;
+    this.Desc = "error";
+
+    if(steps == 0)
+    {
+        if(start == 'Midi')
+        {
+            this.Algo = "Midi";
+            this.Desc = "Midi input, normally via a keyboard, or a piano roll.";
+        }
+        else if(start == 'Input')
+        {
+            this.Algo = "Input";
+            this.Desc = "Sound input, such as a microphone or a guitar line in.";
+        }
+        else if(start == 'Sample')
+        {
+            this.Algo = "Sample";
+            this.Desc = "Sample input, such as a drumkit or foley.";
+        };
+        
+    }
+    else if( steps > 0 )
+    {
+        var textArray = [
+            'Reverb','Distortion','Delay','Equalisation','Compression', 'Formant shift', 'Pitch shift', 'Pitch Bends'
+        ];
+
+        var textArray2 = [
+            'Reverb the sound, playing with all the knobs.',
+            'Distort the sound.',
+            'Add a delay to the sound.',
+            'Play around with an EQ to bring out some frequencies.',
+            'Compress your sound.',
+            'Formant shift your sound up or down some.',
+            'Pitch shift your sound up or down some',
+            'Add pitch bends into the melody.'
+        ];
+    
+        var rand1 = Math.floor(Math.random()*textArray.length);
+        this.Algo = textArray[rand1];
+        this.Desc = textArray2[rand1];
+    };
+
+    if( steps > 7 )
+    {
+        this.Algo = "Audio";
+        this.Check = false;
+        this.Desc = "End audio output should be a new sound.";
+    };
+
+  };
+
+};
+</script>
+</body>
+</html>
