@@ -10,27 +10,135 @@
     <link rel="stylesheet" href="css.css">
 
     <title>noise . website</title>
-    <body>
+    <body style="background-color: rgba(0, 0, 0, 0.0)">
+        
+        
         <h1><a href="index.html">noise . website | Sound Designer</a><h1>
         	<h2>Sound Designer</h2>
-    <div class="col-12 text-center">
-
+        
         <form id="form" >
             <input id="buttonian"type="button" value='0' onclick="Convert()">
         </form>
+<div id="canvasBG">
+        <div id="output" >
 
-        <div id="output">
+    </div></div>
 
-    </div>
-
-    </div>
+    
     
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-<script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/97/three.js"></script>
+        <script src="js/dev.js"></script>
+        <script>
+            
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+            var mouse = [.5, .5];
+            var controls = new THREE.DeviceOrientationControls( camera );
+            var renderer = new THREE.WebGLRenderer();
+
+            fogColor = new THREE.Color(0x000000);
+ 
+            scene.background = fogColor;
+            scene.fog = new THREE.Fog(fogColor, 0.0025, 20);
+
+            var light = new THREE.PointLight( 0xffffff, 1, 100 );
+            light.position.set( 0, 0, 0 );
+            scene.add( light );
+
+            document.getElementById("canvasBG").appendChild(renderer.domElement);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            //renderer.setClearColor(0xF0F0F0); lol animate this shit
+            window.addEventListener( 'mousemove', onMouseMove, false );
+            window.addEventListener( 'resize', onWindowResize, false );
+
+            camera.position.z = 5; //needed?
+
+            var pArr = planes();
+            
+
+            function animate() {
+                requestAnimationFrame( animate );
+                for(var i = 0; i < 5; i++)
+                {
+                    animPlanesCOL(pArr);
+                }
+
+                camera.position.x = Math.sin(.5 * Math.PI * (mouse[0] - .5));
+                camera.position.y = Math.sin(.25 * Math.PI * (mouse[1] - .5));
+                camera.position.z = Math.cos(.5 * Math.PI * (mouse[0] - .5));
+                camera.lookAt(0,0,0);
+                camera.position.z = 5;
+                controls.update();
+                renderer.render( scene, camera );
+            }
+            animate();
+
+            function planes()
+            {
+                var mod = 8;
+                var arr = [];
+                var i;
+                for (i = 0; i < 10; i++) { 
+                    var u;
+                    for (u = 0; u < 10; u++) { 
+                        var y;
+                        for (y = 0; y < 10; y++) { 
+
+                            var geo =  new THREE.RingGeometry( 1, 2, 32);
+                            var c = newCOL("#8B4513", "#452209");
+                            var material = new THREE.MeshBasicMaterial( { color: c } );
+                            var plane = new THREE.Mesh( geo, material );
+                            
+                            plane.position.x = i * mod - (10* mod/2);
+                            plane.position.y = u * mod - (10* mod/2);
+                            plane.position.z = y * mod - (10* mod/2) + 10;
+                            plane.rotation.x = 0;
+                            arr.push(plane);
+                            scene.add( plane );
+                        }
+                    }
+                }
+                return arr;
+            }
+
+            function animPlanesCOL(pArr)
+            {
+                var item = pArr[Math.floor(Math.random()*pArr.length)];
+                var c = newCOL("#8b4513", "#1b0d03");
+                var material = new THREE.MeshBasicMaterial( { color: c } );
+                item.material = material;
+                var r = Math.random(0,1);
+            }
+
+            function rgb(string){
+                return string.match(/\w\w/g).map(function(b){ return parseInt(b,16) })
+            }
+
+            function newCOL(col1, col2){
+                var rgb1 = rgb(col1);
+                var rgb2 = rgb(col2);
+                var rgb3 = [];
+                for (var i=0; i<3; i++) rgb3[i] = rgb1[i]+Math.random()*(rgb2[i]-rgb1[i])|0;
+                return '#' + rgb3.map(function(n){ return n.toString(16) }).map(function(s){ return "00".slice(s.length)+s}).join(''); 
+            }
+
+            function onMouseMove(ev) {
+                mouse[0] = ev.clientX / window.innerWidth;
+                mouse[1] = ev.clientY / window.innerHeight;
+            }
+
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize( window.innerWidth, window.innerHeight );
+            }
+
 function Convert(){
 
     var o = parseInt(document.getElementById("buttonian").value);
@@ -39,15 +147,18 @@ function Convert(){
     console.log(s);
     document.getElementById("buttonian").value = (o+1).toString();
     var mount = s.InstrumentCount-1;
-    document.getElementById("output").innerHTML +=  "</br><div class='container'><h1>Section ID: " + o.toString() + "</h1><div><h2> Instrument count: " + mount.toString() + "</h2></div>";
+    document.getElementById("output").innerHTML += "<div class='container'>";
+    document.getElementById("output").innerHTML += "<div class='row'>";
+    document.getElementById("output").innerHTML +=  "</br><div class='col'><h1>Section ID: " + o.toString() + "</h1><h2> Instrument count: " + mount.toString() + "</h2></div>";
     for (var x = 1; x < s.InstrumentCount; x++) {
         var count = x;
-        document.getElementById("output").innerHTML += "</br><div  class='container'><h3>Instrument: " + count.toString() + "</h3> ";
-        document.getElementById("output").innerHTML += "</br><div  class='col'><h4>Sounds: " + s.Sounds[x].Start + "</h4></div> ";
+        document.getElementById("output").innerHTML += "<div class='row'>";
+        document.getElementById("output").innerHTML += "</br><div  class='container text-primary' ><h3>Instrument: " + count.toString() + "</h3> ";
+        document.getElementById("output").innerHTML += "</br><div  class='col-sm text-success'><h4>Sounds: " + s.Sounds[x].Start + "</h4></div> ";
 
         for (var y = 0; y < s.Sounds[x].stepObjs.length; y++) {
-            document.getElementById("output").innerHTML += "</br><div  class='col'><h5>Step: " + s.Sounds[x].stepObjs[y].Algo + "</h5>";
-            document.getElementById("output").innerHTML += "</br><div  class='container'><h6>Description: " + s.Sounds[x].stepObjs[y].Desc + "</h6></div></div>";
+            document.getElementById("output").innerHTML += "</br><div  class='col-sm text-danger'><h5>Step: " + s.Sounds[x].stepObjs[y].Algo + "</h5>";
+            document.getElementById("output").innerHTML += "</br><div  class='col-sm text-info'><h6>Description: " + s.Sounds[x].stepObjs[y].Desc + "</h6></div></div>";
         }
         document.getElementById("output").innerHTML += "</div>";
         
@@ -116,17 +227,17 @@ class Step {
         if(start == 'Midi')
         {
             this.Algo = "Midi";
-            this.Desc = "Midi input, normally via a keyboard, or a piano roll.";
+            this.Desc = "<p class='lead'><strong>Midi</strong> input, normally via a keyboard, or a piano roll.</p>";
         }
         else if(start == 'Input')
         {
             this.Algo = "Input";
-            this.Desc = "Sound input, such as a microphone or a guitar line in.";
+            this.Desc = "<p class='lead'><strong>Sound</strong> input, such as a microphone or a guitar line in.</p>";
         }
         else if(start == 'Sample')
         {
             this.Algo = "Sample";
-            this.Desc = "Sample input, such as a drumkit or foley.";
+            this.Desc = "<p class='lead'><strong>Sample</strong> input, such as a drumkit or foley.</p>";
         };
         
     }
@@ -137,14 +248,14 @@ class Step {
         ];
 
         var textArray2 = [
-            'Reverb the sound, playing with all the knobs.',
-            'Distort the sound.',
-            'Add a delay to the sound.',
-            'Play around with an EQ to bring out some frequencies.',
-            'Compress your sound.',
-            'Formant shift your sound up or down some.',
-            'Pitch shift your sound up or down some',
-            'Add pitch bends into the melody.'
+            '<p class="lead"><strong>Reverb</strong> the sound, playing with <strong>all the knobs.</strong></p>',
+            '<p class="lead"><strong>Distort</strong> the sound.</p><img src="images/trash.png" class="img-fluid" alt="Responsive image">',
+            '<p class="lead">Add a <strong>delay</strong> to the sound.</p>',
+            '<p class="lead">Play around with an <strong>EQ</strong> to bring out some frequencies.</p>',
+            '<p class="lead"><strong>Compress</strong> your sound.</p>',
+            '<p class="lead"><strong>Formant shift</strong> your sound up or down some.</p>',
+            '<p class="lead"><strong>Pitch shift</strong> your sound up or down some</p>',
+            '<p class="lead">Add <strong>pitch bends</strong> into the melody.</p>'
         ];
     
         var rand1 = Math.floor(Math.random()*textArray.length);
@@ -156,7 +267,7 @@ class Step {
     {
         this.Algo = "Audio";
         this.Check = false;
-        this.Desc = "End audio output should be a new sound.";
+        this.Desc = "<p class='lead'>End audio <strong>output</strong> should be a new sound.</p>";
     };
 
   };
