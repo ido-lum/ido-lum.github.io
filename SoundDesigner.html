@@ -14,15 +14,14 @@
         
         
         <h1><a href="index.html">noise . website | Sound Designer</a><h1>
-        	<h2>Sound Designer</h2>
         
         <form id="form" >
             <input id="buttonian"type="button" value='0' onclick="Convert()">
         </form>
-<div id="canvasBG">
+<p id="canvasBG">
         <div id="output" >
 
-    </div></div>
+    </div></p>
 
     
     
@@ -47,7 +46,7 @@
       uniform float time;
       void main() {
         vec2 p = - 1.0 + 2.0 * vUv;
-        float a = time * 40.0;
+        float a = time * 180.0;
         float d, e, f, g = 1.0 / 40.0 ,h ,i ,r ,q;
         e = 400.0 * ( p.x * 0.5 + 0.5 );
         f = 400.0 * ( p.y * 0.5 + 0.5 );
@@ -73,7 +72,7 @@
       }
     </script>
 
-    <script type="module">
+    <script>
       var container;
       var camera, scene, renderer;
       var uniforms;
@@ -109,8 +108,6 @@
         uniforms[ "time" ].value = timestamp / 1000;
         renderer.render( scene, camera );
       }
-    </script>
-        <script>
  
 
 function Convert(){
@@ -127,12 +124,12 @@ function Convert(){
     for (var x = 1; x < s.InstrumentCount; x++) {
         var count = x;
         document.getElementById("output").innerHTML += "<div class='row'>";
-        document.getElementById("output").innerHTML += "</br><div  class='container text-primary' ><h3>Instrument: " + count.toString() + "</h3> ";
-        document.getElementById("output").innerHTML += "</br><div  class='col-sm text-success'><h4>Sounds: " + s.Sounds[x].Start + "</h4></div> ";
+        document.getElementById("output").innerHTML += "</br><div  class='container' ><h3>Instrument: " + count.toString() + "</h3> ";
+        document.getElementById("output").innerHTML += "</br><div  class='col-sm'><h4>Sounds: " + s.Sounds[x].Start + "</h4></div> ";
 
         for (var y = 0; y < s.Sounds[x].stepObjs.length; y++) {
-            document.getElementById("output").innerHTML += "</br><div  class='col-sm text-danger'><h5>Step: " + s.Sounds[x].stepObjs[y].Algo + "</h5>";
-            document.getElementById("output").innerHTML += "</br><div  class='col-sm text-info'><h6>Description: " + s.Sounds[x].stepObjs[y].Desc + "</h6></div></div>";
+            document.getElementById("output").innerHTML += "</br><div  class='col-sm'><h5>Step: " + s.Sounds[x].stepObjs[y].Algo + "</h5>";
+            document.getElementById("output").innerHTML += "</br><div  class='col-sm'><h6><box>Description: " + s.Sounds[x].stepObjs[y].Desc + "</h6></box></div></div>";
         }
         document.getElementById("output").innerHTML += "</div>";
         

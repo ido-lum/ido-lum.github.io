@@ -10,6 +10,29 @@
 html
 {
 	background-color: #1a1a1a;
+  color: rgb(255,255,255);
+  text-align: center;
 }
 
-canvas {width: 100vw; height: 100vh; display: block; position: fixed; top: 0; left: 0; z-index: -9999;}
+canvas {width: 100vw; height: 100vh; display: block; position: fixed; top: 0; left: 0; z-index: -99;}
+
+div {
+margin: 30px;
+  text-shadow: 3px 2px red;
+  color: rgb(255,255,255);
+  /*background-color: #101010;*/
+
+}
+
+form {
+text-align: center;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+box {
+  color: white;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
